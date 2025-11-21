@@ -1,5 +1,8 @@
 "use client";
 import {  useState } from "react";
+import { contactSchema } from "../lib/contactSchema";
+import toast from "react-hot-toast";
+import { LuSend } from "react-icons/lu";
 
 const Contact = () => {
     const [name, setName] = useState("");
@@ -9,6 +12,20 @@ const Contact = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    const parsedData = contactSchema.safeParse({
+        name,
+        email,
+        phone,
+        message,
+    });
+    
+    if (!parsedData.success) {
+        const firstError = Object.values(parsedData.error.flatten().fieldErrors)[0]?.[0];
+        toast.error(firstError || "Invalid input");
+        return;
+    }
+
     try {
         const response = await fetch('/api/contact', {
             method: 'POST',
@@ -23,11 +40,16 @@ const Contact = () => {
             }),
         });
         if (response.ok) {
-            alert('Message sent successfully!');
+            toast.success('Message sent successfully!');
+            setName("");
+            setEmail("");
+            setPhone("");
+            setMessage("");
         }
     } catch (error) {
-        alert('Failed to send message.');
+        toast.error('Failed to send message.');
     }
+    
     }
   return (
     <div className="py-8 mx-auto max-w-3xl transition-colors duration-100 text-black dark:text-white">
@@ -47,17 +69,19 @@ const Contact = () => {
             <input
               type="text"
               onChange={(e)=>{setName(e.target.value)}}
+              value={name}
               placeholder="Your full name"
-              className="w-full px-2 py-2  dark:bg-neutral-900 bg-neutral-100  border dark:border-neutral-700 border-neutral-500 rounded-xl  dark:text-neutral-100 text-neutral-900  placeholder-neutral-900 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-500"
+              className="w-full px-2 py-2  dark:bg-neutral-900 bg-white  border dark:border-neutral-700 border-neutral-500 rounded-xl  dark:text-neutral-100 text-neutral-900  placeholder-neutral-900 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-500"
             />
             </label>
 
             <label>Phone*
             <input
               type="text"
+                value={phone}
                 onChange={(e)=>{setPhone(e.target.value)}}
               placeholder="+1 (123)xx-xxxxx"
-              className="w-full px-2 py-2 dark:bg-neutral-900 bg-neutral-100  border dark:border-neutral-700 border-neutral-500 rounded-xl  dark:text-neutral-100 text-neutral-900  placeholder-neutral-900 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-500"
+              className="w-full px-2 py-2 dark:bg-neutral-900 bg-white  border dark:border-neutral-700 border-neutral-500 rounded-xl  dark:text-neutral-100 text-neutral-900  placeholder-neutral-900 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-500"
             />
             </label>
           </div>
@@ -66,18 +90,20 @@ const Contact = () => {
           <label>Email*
           <input
             type="email"
+            value={email}
             onChange={(e)=>{setEmail(e.target.value)}}
             placeholder="your.email@example.com"
-            className="w-full px-2 py-2 dark:bg-neutral-900 bg-neutral-100  border dark:border-neutral-700 border-neutral-500 rounded-xl  dark:text-neutral-100 text-neutral-900  placeholder-neutral-900 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-500"
+            className="w-full px-2 py-2 dark:bg-neutral-900 bg-white  border dark:border-neutral-700 border-neutral-500 rounded-xl  dark:text-neutral-100 text-neutral-900  placeholder-neutral-900 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-500"
           />
             </label>
           
             <label>Message*
           <textarea
             rows={5}
+            value={message}
             onChange={(e)=>{setMessage(e.target.value)}}
             placeholder="Tell me about your project or just say hello..."
-            className="w-full px-2 py-2 dark:bg-neutral-900 bg-neutral-100  border dark:border-neutral-700 border-neutral-500 rounded-xl  dark:text-neutral-100 text-neutral-900  placeholder-neutral-900 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-500"
+            className="w-full px-2 py-2 dark:bg-neutral-900 bg-white  border dark:border-neutral-700 border-neutral-500 rounded-xl  dark:text-neutral-100 text-neutral-900  placeholder-neutral-900 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-500"
           />
             </label>
 
@@ -85,6 +111,7 @@ const Contact = () => {
             type="submit"
             className="w-fit flex items-center gap-2 px-6 py-3 dark:bg-white bg-black  text-white dark:text-black font-semibold rounded-xl hover:bg-neutral-800 cursor-pointer dark:hover:bg-neutral-200 transition"
           >
+            <LuSend className="text-lg"/>
             Send Message
           </button>
         </form>

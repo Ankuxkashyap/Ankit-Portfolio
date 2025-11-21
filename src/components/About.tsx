@@ -3,7 +3,7 @@ import { skills, skillIcons, skillColors } from "../data/skills";
 import TechPill from "./TechPill";
 const About = () => {
   return (
-    <div className="py-8 mx-auto max-w-6xl transition-colors duration-100 text-black dark:text-white">
+    <section id="about" className="py-8 mx-auto max-w-6xl transition-colors duration-100 text-black dark:text-white">
       <p className="px-5 text-sm text-neutral-400">About</p>
       <h2 className="px-5 text-2xl font-bold mb-4">Me</h2>
       <div className="px-5 space-y-4 text-neutral-700 dark:text-neutral-300">
@@ -38,7 +38,7 @@ const About = () => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

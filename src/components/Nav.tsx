@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import { LuMoon } from "react-icons/lu";
 import { BsBrightnessHigh } from "react-icons/bs";
 import { useTheme } from "next-themes";
+import Link from "next/link";
 
 const Nav = () => {
   const [scrolled, setScrolled] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme,resolvedTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -25,18 +26,20 @@ const Nav = () => {
     >
       <div className="flex items-center justify-between transition-colors duration-300 py-3 px-2">
         <div className="flex items-center">
+          <Link href="/" className="courser-pointer">
           <img
             loading="lazy" 
             src="/avatar_1747346587.png"
             className="rounded-2xl  dark:border-white/50 border-black/50 border-2 w-14 h-14"
             alt="logo"
           />
+          </Link>
 
           <div className="flex items-baseline ml-4 gap-6 mt-8">
-            {["Projects", "Education", "Contact"].map((item) => (
+            {["About", "Projects" , "Contact"].map((item) => (
               <a
-                key={item}
-                href={`/${item.toLowerCase()}`}
+                key={item} 
+                href={item === "About" ? "/#about" : `/${item.toLowerCase()}`}
                 className="transition-all duration-300 ease-in-out hover:underline hover:decoration-2 hover:underline-offset-4 text-black dark:text-white"
               >
                 {item}
@@ -47,16 +50,16 @@ const Nav = () => {
 
         <div className="flex items-center">
           <button
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="inline-flex items-center justify-center size-10 rounded-md border border-black/10 dark:border-white/20 transition-all duration-300 active:scale-95 hover:bg-gray-100 cursor-pointer dark:hover:bg-gray-900/70"
-            aria-label="Toggle theme"
-          >
-            {theme === "dark" ? (
-              <BsBrightnessHigh className="text-neutral-300 text-lg" />
-            ) : (
-              <LuMoon className="text-gray-800 text-lg" />
-            )}
-          </button>
+          onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+          className="inline-flex items-center justify-center size-10 rounded-md border border-black/10 dark:border-white/20 transition-all duration-300 active:scale-95 hover:bg-gray-100 cursor-pointer dark:hover:bg-gray-900/70"
+          aria-label="Toggle theme"
+        >
+          {resolvedTheme === "dark" ? (
+            <BsBrightnessHigh className="text-neutral-300 text-lg" />
+          ) : (
+            <LuMoon className="text-gray-800 text-lg" />
+          )}
+        </button>
         </div>
       </div>
     </header>

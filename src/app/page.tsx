@@ -11,7 +11,7 @@ export default function Home() {
       <div className=" mx-auto max-w-3xl border border-black/10 dark:border-white/10 border-x">
       <Nav />
       <Hero />
-      <Projects />
+      <Projects byDefault={false} />
       <About/>
       <Education />
       <Contact />
